@@ -10,6 +10,7 @@ import org.yasmani.io.todomanagerapp.service.TodoService;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1/todos")
 @AllArgsConstructor
@@ -37,5 +38,31 @@ public class TodoController {
     public ResponseEntity<List<TodoDto>> getTodos() {
         List<TodoDto> todoDtos = todoService.getTodos();
         return  ResponseEntity.ok(todoDtos);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TodoDto> updateTodo(@PathVariable Long id,
+                                              @RequestBody TodoDto todoDto) {
+        TodoDto updatedTodo = todoService.updateTodo(id, todoDto);
+        return new ResponseEntity<>(updatedTodo, HttpStatus.OK);
+    }
+
+    // build rest api to delete a todo
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTodo(@PathVariable Long id) {
+        todoService.deleteTodoById(id);
+        return ResponseEntity.ok("Todo deleted successfully");
+    }
+
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<TodoDto> completeTodo(@PathVariable Long id) {
+        TodoDto todoDto = todoService.completeTodoById(id);
+        return new ResponseEntity<>(todoDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/uncomplete")
+    public ResponseEntity<TodoDto> uncompleteTodo(@PathVariable Long id) {
+        TodoDto todoDto = todoService.uncompleteTodoById(id);
+        return new ResponseEntity<>(todoDto, HttpStatus.OK);
     }
 }
