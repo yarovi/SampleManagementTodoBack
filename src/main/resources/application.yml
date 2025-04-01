@@ -5,6 +5,7 @@ spring:
     username: root
     password: 123
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -12,3 +13,8 @@ spring:
     #properties:
     #  hibernate:
     #   dialect: org.hibernate.dialect.Mysql5Dialect
+  security:
+    user:
+      name: yami
+      password: 123
+    roles: ADMIN, USER, GUEST
