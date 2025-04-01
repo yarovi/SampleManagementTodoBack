@@ -15,7 +15,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.yasmani.io.todomanagerapp.security.JwtAuthenticationEntryPoint;
+import org.yasmani.io.todomanagerapp.security.JwtAuthenticationFilter;
+import org.yasmani.io.todomanagerapp.service.JwtTokenProvider;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -23,6 +28,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 @AllArgsConstructor
 public class TodoSecurityConfig {
+
+    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private JwtAuthenticationFilter authenticationFilter;
 
     private UserDetailsService userDetailsService;
 
@@ -47,8 +55,19 @@ public class TodoSecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .anyRequest().authenticated()
                 ).formLogin(AbstractHttpConfigurer::disable);
+
+        http
+                .exceptionHandling(exception-> exception.
+                        authenticationEntryPoint(authenticationEntryPoint)
+
+                );
+
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
+
 
 
     @Bean

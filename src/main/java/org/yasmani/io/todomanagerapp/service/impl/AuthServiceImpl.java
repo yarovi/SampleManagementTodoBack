@@ -16,6 +16,7 @@ import org.yasmani.io.todomanagerapp.exception.TodoApiException;
 import org.yasmani.io.todomanagerapp.repository.RoleRepository;
 import org.yasmani.io.todomanagerapp.repository.UserRepository;
 import org.yasmani.io.todomanagerapp.service.AuthService;
+import org.yasmani.io.todomanagerapp.service.JwtTokenProvider;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,8 +28,9 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
-
     private AuthenticationManager authenticationManager;
+
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     public String register(RegisterDto registerDto) {
@@ -72,12 +74,12 @@ public class AuthServiceImpl implements AuthService {
                         loginDto.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        String token = jwtTokenProvider.generateToken(authentication);
 
-
-        return "User logged-in successfully";
+        //return "User logged-in successfully";
+        return token;
 
     }
 

@@ -18,3 +18,7 @@ spring:
       name: yami
       password: 123
     roles: ADMIN, USER, GUEST
+app:
+  jwt:
+    secret: 36d1e6b6abca1fdaabe1c2d61aba0a1167de6f861b92c1deae92f2189c6b4b32
+    expiration: 86400000

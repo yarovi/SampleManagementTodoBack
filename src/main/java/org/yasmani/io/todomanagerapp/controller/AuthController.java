@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.yasmani.io.todomanagerapp.dto.JwtAuthResponse;
 import org.yasmani.io.todomanagerapp.dto.LoginDto;
 import org.yasmani.io.todomanagerapp.dto.RegisterDto;
 import org.yasmani.io.todomanagerapp.service.AuthService;
@@ -23,8 +24,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-        String response = authService.login(loginDto);
+    //public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto) {
+        String token = authService.login(loginDto);
+        JwtAuthResponse response = new JwtAuthResponse();
+        response.setAccessToken(token);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
